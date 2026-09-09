@@ -1,0 +1,779 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		08CEB0A5D3A4310A5D68C1A8 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = C49B1DA4791564F1F1F4D57D /* L10n.swift */; };
+		0F14362F87CF1263E1B2C4D2 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC8223ACFF042B6B3C8CED0 /* Feedback.swift */; };
+		160FA681FFB350043FB9CC52 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062A7E90EBFCED43320ABBD4 /* HomeView.swift */; };
+		288DD0A8639EF40EF49A0C0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3220545A7FB85F85AE6A4A2 /* Assets.xcassets */; };
+		29438038FE52B52A4823DB2C /* WorldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440FF9F0BAEC0B7956F8745C /* WorldsView.swift */; };
+		33B690AAE72AA5AD24563093 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44C9349A3D6D2708D8FC9EE4 /* ResultView.swift */; };
+		3C1C08890F9739A8EE6DF029 /* ToppingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6525719B9A4F4D7050FEF54D /* ToppingViews.swift */; };
+		3D3DE141439A3CC032180052 /* GuestViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F40D2AA4C6679FDD75F742 /* GuestViews.swift */; };
+		570D8C1277B671D611D97964 /* GeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D57919C0F166D4E1B30960B /* GeometryTests.swift */; };
+		5D1663B563E440349CF4E27C /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242BD640ADDEE31C42B7A0AC /* Layout.swift */; };
+		6569CB0705F7BE9F64C79D23 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BA6A12B3CFC34841C089C4 /* Models.swift */; };
+		65FD59CF93F48AE4F29B7897 /* SplitPicnicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E843D6C47D84B3FE8A944 /* SplitPicnicApp.swift */; };
+		66FB2B0873286ED4FF24EB14 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C40C2C55C70FA85BD66C9A /* Geometry.swift */; };
+		7180FE51FCB229077149FAF1 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B45CBAFA0DB4DF552465596 /* DesignSystem.swift */; };
+		8507A06CAC9CAF34F4EC3C2E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 67A6235A89879AE978E10D31 /* PrivacyInfo.xcprivacy */; };
+		8569B95A0A7389182FD351F8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7A5A48FE7F542E662D6719 /* SettingsView.swift */; };
+		9190D02A441EC6CE4C1EDCD1 /* DailyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 850312E78CDDCE6C1D376630 /* DailyView.swift */; };
+		96BCB71843784DEF009445B0 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F28E1196DDACB671DC9797 /* AppModel.swift */; };
+		A2D3297273704560A1A60E54 /* SeededRNG.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BC1E292DCFEDA2771ED0E9 /* SeededRNG.swift */; };
+		ABE62C009DE12C0454FAB8F0 /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC0F052E1CDB55B66E5DE07 /* Catalog.swift */; };
+		B0951CF0E517AC892945A44F /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19B8F442BD6F5ECB8BF1F7E /* TutorialView.swift */; };
+		B609F16BD5CB6A8E6F2F597E /* Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBA5342007A6671DAEB2DF7 /* Stores.swift */; };
+		B89D69C665A9FD0B57C38220 /* SplitPicnicUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81768A764E4ACF8C1ACFBA5C /* SplitPicnicUITests.swift */; };
+		CC271CAB010012FB870E5228 /* DishView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96B3A8F783C82951A47797B3 /* DishView.swift */; };
+		D499B85EADB5D06328F17B08 /* Evaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637413AF37B3F45FDADD3D49 /* Evaluator.swift */; };
+		EC0D01804CDFFCFC8EB5F7A7 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B9B06DAE2CD51941914E1F /* CollectionView.swift */; };
+		F90F5B41AA4A268AD021269B /* PlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A0E7271684A64E79A36A0A /* PlayView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7BC638AC95E4FDFAFD95DDF0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA71E0903AE3F68829D78080 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA2A937844FCC7EF5BDBA55;
+			remoteInfo = SplitPicnic;
+		};
+		815BBF6AE5E8BD0F3C7FBB63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EA71E0903AE3F68829D78080 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA2A937844FCC7EF5BDBA55;
+			remoteInfo = SplitPicnic;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		062A7E90EBFCED43320ABBD4 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		1B45CBAFA0DB4DF552465596 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		242BD640ADDEE31C42B7A0AC /* Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
+		37C40C2C55C70FA85BD66C9A /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		37F28E1196DDACB671DC9797 /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		440FF9F0BAEC0B7956F8745C /* WorldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldsView.swift; sourceTree = "<group>"; };
+		44C9349A3D6D2708D8FC9EE4 /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		637413AF37B3F45FDADD3D49 /* Evaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Evaluator.swift; sourceTree = "<group>"; };
+		6525719B9A4F4D7050FEF54D /* ToppingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToppingViews.swift; sourceTree = "<group>"; };
+		67A6235A89879AE978E10D31 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		72B9B06DAE2CD51941914E1F /* CollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		75BA6A12B3CFC34841C089C4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		7D57919C0F166D4E1B30960B /* GeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryTests.swift; sourceTree = "<group>"; };
+		81768A764E4ACF8C1ACFBA5C /* SplitPicnicUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitPicnicUITests.swift; sourceTree = "<group>"; };
+		850312E78CDDCE6C1D376630 /* DailyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyView.swift; sourceTree = "<group>"; };
+		8F7A5A48FE7F542E662D6719 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		90A0E7271684A64E79A36A0A /* PlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayView.swift; sourceTree = "<group>"; };
+		96B3A8F783C82951A47797B3 /* DishView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishView.swift; sourceTree = "<group>"; };
+		A19B8F442BD6F5ECB8BF1F7E /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		B6EC8C8267799AC8078D0CB4 /* SplitPicnic.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SplitPicnic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B91E843D6C47D84B3FE8A944 /* SplitPicnicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitPicnicApp.swift; sourceTree = "<group>"; };
+		C3220545A7FB85F85AE6A4A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C49B1DA4791564F1F1F4D57D /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
+		CA862FEA3C7F4D57727550A8 /* SplitPicnicUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SplitPicnicUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F40D2AA4C6679FDD75F742 /* GuestViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestViews.swift; sourceTree = "<group>"; };
+		DB56B77E55CA34D508CD7434 /* SplitPicnic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SplitPicnic.entitlements; sourceTree = "<group>"; };
+		DCC8223ACFF042B6B3C8CED0 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
+		DEBA5342007A6671DAEB2DF7 /* Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stores.swift; sourceTree = "<group>"; };
+		E12F06CBA78727AA601EA03C /* SplitPicnicTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SplitPicnicTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6BC1E292DCFEDA2771ED0E9 /* SeededRNG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeededRNG.swift; sourceTree = "<group>"; };
+		FCC0F052E1CDB55B66E5DE07 /* Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Catalog.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		01A4F9398E001A01972229AF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B6EC8C8267799AC8078D0CB4 /* SplitPicnic.app */,
+				E12F06CBA78727AA601EA03C /* SplitPicnicTests.xctest */,
+				CA862FEA3C7F4D57727550A8 /* SplitPicnicUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0CC2DBA74F802FBCCE04761D /* SplitPicnicTests */ = {
+			isa = PBXGroup;
+			children = (
+				7D57919C0F166D4E1B30960B /* GeometryTests.swift */,
+			);
+			path = SplitPicnicTests;
+			sourceTree = "<group>";
+		};
+		163C5EC5860A3789D1E1EE9E = {
+			isa = PBXGroup;
+			children = (
+				A2B69DD1D3948705920DE4A4 /* SplitPicnic */,
+				0CC2DBA74F802FBCCE04761D /* SplitPicnicTests */,
+				9D612115E6BB5D24FB46E421 /* SplitPicnicUITests */,
+				01A4F9398E001A01972229AF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		16BC286554665372FD418909 /* Worlds */ = {
+			isa = PBXGroup;
+			children = (
+				440FF9F0BAEC0B7956F8745C /* WorldsView.swift */,
+			);
+			path = Worlds;
+			sourceTree = "<group>";
+		};
+		17372951858DED70AC3914A4 /* Result */ = {
+			isa = PBXGroup;
+			children = (
+				44C9349A3D6D2708D8FC9EE4 /* ResultView.swift */,
+			);
+			path = Result;
+			sourceTree = "<group>";
+		};
+		2639325FE8D6C59D53E761D3 /* Food */ = {
+			isa = PBXGroup;
+			children = (
+				96B3A8F783C82951A47797B3 /* DishView.swift */,
+				6525719B9A4F4D7050FEF54D /* ToppingViews.swift */,
+			);
+			path = Food;
+			sourceTree = "<group>";
+		};
+		2841C59A6424C72779F4C363 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				A19B8F442BD6F5ECB8BF1F7E /* TutorialView.swift */,
+			);
+			path = Tutorial;
+			sourceTree = "<group>";
+		};
+		2FFFD89C98F3C8653281E69C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8F7A5A48FE7F542E662D6719 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		30C30FA16EF3A4EADA957F44 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				37F28E1196DDACB671DC9797 /* AppModel.swift */,
+				B91E843D6C47D84B3FE8A944 /* SplitPicnicApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3406FE9CC86FAE273599824F /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				CD994C3C14E5FC5A79530F51 /* Engine */,
+				2639325FE8D6C59D53E761D3 /* Food */,
+				55FBCD291785EFDFC8615068 /* Guests */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		4F57591957C9D743811EA6C8 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				DEBA5342007A6671DAEB2DF7 /* Stores.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		55FBCD291785EFDFC8615068 /* Guests */ = {
+			isa = PBXGroup;
+			children = (
+				D4F40D2AA4C6679FDD75F742 /* GuestViews.swift */,
+			);
+			path = Guests;
+			sourceTree = "<group>";
+		};
+		5A2B12657C00F0615A682D0F /* Collection */ = {
+			isa = PBXGroup;
+			children = (
+				72B9B06DAE2CD51941914E1F /* CollectionView.swift */,
+			);
+			path = Collection;
+			sourceTree = "<group>";
+		};
+		643155839A77502950FA33D6 /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				1B45CBAFA0DB4DF552465596 /* DesignSystem.swift */,
+				C49B1DA4791564F1F1F4D57D /* L10n.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		9D612115E6BB5D24FB46E421 /* SplitPicnicUITests */ = {
+			isa = PBXGroup;
+			children = (
+				81768A764E4ACF8C1ACFBA5C /* SplitPicnicUITests.swift */,
+			);
+			path = SplitPicnicUITests;
+			sourceTree = "<group>";
+		};
+		9FA59FE2E94A90391C9BD4DB /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				DCC8223ACFF042B6B3C8CED0 /* Feedback.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		A2B69DD1D3948705920DE4A4 /* SplitPicnic */ = {
+			isa = PBXGroup;
+			children = (
+				30C30FA16EF3A4EADA957F44 /* App */,
+				9FA59FE2E94A90391C9BD4DB /* Audio */,
+				643155839A77502950FA33D6 /* DesignSystem */,
+				D9731755E312F4F2B23EBE25 /* Features */,
+				3406FE9CC86FAE273599824F /* Game */,
+				4F57591957C9D743811EA6C8 /* Persistence */,
+				DF5753235977BE0B6A9AC11A /* Resources */,
+				DB56B77E55CA34D508CD7434 /* SplitPicnic.entitlements */,
+			);
+			path = SplitPicnic;
+			sourceTree = "<group>";
+		};
+		B28A2019DECA7C839BD20B5E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				062A7E90EBFCED43320ABBD4 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		C9C3F523E46BE83B0684405A /* Daily */ = {
+			isa = PBXGroup;
+			children = (
+				850312E78CDDCE6C1D376630 /* DailyView.swift */,
+			);
+			path = Daily;
+			sourceTree = "<group>";
+		};
+		CD994C3C14E5FC5A79530F51 /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				FCC0F052E1CDB55B66E5DE07 /* Catalog.swift */,
+				637413AF37B3F45FDADD3D49 /* Evaluator.swift */,
+				37C40C2C55C70FA85BD66C9A /* Geometry.swift */,
+				242BD640ADDEE31C42B7A0AC /* Layout.swift */,
+				75BA6A12B3CFC34841C089C4 /* Models.swift */,
+				E6BC1E292DCFEDA2771ED0E9 /* SeededRNG.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
+		D9731755E312F4F2B23EBE25 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				5A2B12657C00F0615A682D0F /* Collection */,
+				C9C3F523E46BE83B0684405A /* Daily */,
+				B28A2019DECA7C839BD20B5E /* Home */,
+				DE52A48CB8CE2BB6CF6F3E93 /* Play */,
+				17372951858DED70AC3914A4 /* Result */,
+				2FFFD89C98F3C8653281E69C /* Settings */,
+				2841C59A6424C72779F4C363 /* Tutorial */,
+				16BC286554665372FD418909 /* Worlds */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		DE52A48CB8CE2BB6CF6F3E93 /* Play */ = {
+			isa = PBXGroup;
+			children = (
+				90A0E7271684A64E79A36A0A /* PlayView.swift */,
+			);
+			path = Play;
+			sourceTree = "<group>";
+		};
+		DF5753235977BE0B6A9AC11A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C3220545A7FB85F85AE6A4A2 /* Assets.xcassets */,
+				67A6235A89879AE978E10D31 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C2CAD4F340BB23059972082E /* SplitPicnicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8EC1926AEBAD9DF2C33EEB26 /* Build configuration list for PBXNativeTarget "SplitPicnicTests" */;
+			buildPhases = (
+				465C6CE017D5F20A0183914C /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10F6DE9E9668FE11E1831FB1 /* PBXTargetDependency */,
+			);
+			name = SplitPicnicTests;
+			packageProductDependencies = (
+			);
+			productName = SplitPicnicTests;
+			productReference = E12F06CBA78727AA601EA03C /* SplitPicnicTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D05AB10FFC20183E4D84EDF2 /* SplitPicnicUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 751089A5F6CF755DD912015D /* Build configuration list for PBXNativeTarget "SplitPicnicUITests" */;
+			buildPhases = (
+				382AE0E72FDE4663C6E5AF0B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F01D0EFF598D2652E70E2BAE /* PBXTargetDependency */,
+			);
+			name = SplitPicnicUITests;
+			packageProductDependencies = (
+			);
+			productName = SplitPicnicUITests;
+			productReference = CA862FEA3C7F4D57727550A8 /* SplitPicnicUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		EAA2A937844FCC7EF5BDBA55 /* SplitPicnic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 141482E0898AA198C3346270 /* Build configuration list for PBXNativeTarget "SplitPicnic" */;
+			buildPhases = (
+				98CF848AACBD633576A33D73 /* Sources */,
+				7F17EF08BA0D396A8B602147 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SplitPicnic;
+			packageProductDependencies = (
+			);
+			productName = SplitPicnic;
+			productReference = B6EC8C8267799AC8078D0CB4 /* SplitPicnic.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EA71E0903AE3F68829D78080 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C2CAD4F340BB23059972082E = {
+						DevelopmentTeam = XMS5ZC28UJ;
+					};
+					D05AB10FFC20183E4D84EDF2 = {
+						DevelopmentTeam = XMS5ZC28UJ;
+						TestTargetID = EAA2A937844FCC7EF5BDBA55;
+					};
+					EAA2A937844FCC7EF5BDBA55 = {
+						DevelopmentTeam = XMS5ZC28UJ;
+					};
+				};
+			};
+			buildConfigurationList = D551377282B1EDC767426D59 /* Build configuration list for PBXProject "SplitPicnic" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 163C5EC5860A3789D1E1EE9E;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 01A4F9398E001A01972229AF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EAA2A937844FCC7EF5BDBA55 /* SplitPicnic */,
+				C2CAD4F340BB23059972082E /* SplitPicnicTests */,
+				D05AB10FFC20183E4D84EDF2 /* SplitPicnicUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F17EF08BA0D396A8B602147 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				288DD0A8639EF40EF49A0C0D /* Assets.xcassets in Resources */,
+				8507A06CAC9CAF34F4EC3C2E /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		382AE0E72FDE4663C6E5AF0B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B89D69C665A9FD0B57C38220 /* SplitPicnicUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		465C6CE017D5F20A0183914C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				570D8C1277B671D611D97964 /* GeometryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		98CF848AACBD633576A33D73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				96BCB71843784DEF009445B0 /* AppModel.swift in Sources */,
+				ABE62C009DE12C0454FAB8F0 /* Catalog.swift in Sources */,
+				EC0D01804CDFFCFC8EB5F7A7 /* CollectionView.swift in Sources */,
+				9190D02A441EC6CE4C1EDCD1 /* DailyView.swift in Sources */,
+				7180FE51FCB229077149FAF1 /* DesignSystem.swift in Sources */,
+				CC271CAB010012FB870E5228 /* DishView.swift in Sources */,
+				D499B85EADB5D06328F17B08 /* Evaluator.swift in Sources */,
+				0F14362F87CF1263E1B2C4D2 /* Feedback.swift in Sources */,
+				66FB2B0873286ED4FF24EB14 /* Geometry.swift in Sources */,
+				3D3DE141439A3CC032180052 /* GuestViews.swift in Sources */,
+				160FA681FFB350043FB9CC52 /* HomeView.swift in Sources */,
+				08CEB0A5D3A4310A5D68C1A8 /* L10n.swift in Sources */,
+				5D1663B563E440349CF4E27C /* Layout.swift in Sources */,
+				6569CB0705F7BE9F64C79D23 /* Models.swift in Sources */,
+				F90F5B41AA4A268AD021269B /* PlayView.swift in Sources */,
+				33B690AAE72AA5AD24563093 /* ResultView.swift in Sources */,
+				A2D3297273704560A1A60E54 /* SeededRNG.swift in Sources */,
+				8569B95A0A7389182FD351F8 /* SettingsView.swift in Sources */,
+				65FD59CF93F48AE4F29B7897 /* SplitPicnicApp.swift in Sources */,
+				B609F16BD5CB6A8E6F2F597E /* Stores.swift in Sources */,
+				3C1C08890F9739A8EE6DF029 /* ToppingViews.swift in Sources */,
+				B0951CF0E517AC892945A44F /* TutorialView.swift in Sources */,
+				29438038FE52B52A4823DB2C /* WorldsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		10F6DE9E9668FE11E1831FB1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA2A937844FCC7EF5BDBA55 /* SplitPicnic */;
+			targetProxy = 815BBF6AE5E8BD0F3C7FBB63 /* PBXContainerItemProxy */;
+		};
+		F01D0EFF598D2652E70E2BAE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA2A937844FCC7EF5BDBA55 /* SplitPicnic */;
+			targetProxy = 7BC638AC95E4FDFAFD95DDF0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0E42D2D276400BA00DFAF1BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = XMS5ZC28UJ;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		0E5D25E046E4C6661C73BF57 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SplitPicnic.app/SplitPicnic";
+			};
+			name = Release;
+		};
+		278A8E88F68B45D7A1C52ADE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SplitPicnic/SplitPicnic.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDevelopmentRegion = en;
+				INFOPLIST_KEY_CFBundleDisplayName = "Split Picnic";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_BackgroundColor = creamBackground;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic;
+				PRODUCT_NAME = SplitPicnic;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		824FCB441F048231FC3C3D91 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SplitPicnic/SplitPicnic.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDevelopmentRegion = en;
+				INFOPLIST_KEY_CFBundleDisplayName = "Split Picnic";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_BackgroundColor = creamBackground;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic;
+				PRODUCT_NAME = SplitPicnic;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = complete;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CA16B4363A5A862240CC0C57 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = XMS5ZC28UJ;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D137E4210F58D42F4E6AE8D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SplitPicnic;
+			};
+			name = Release;
+		};
+		D4BBA9821FAF034D189FD7F6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SplitPicnic.app/SplitPicnic";
+			};
+			name = Debug;
+		};
+		FC5B48E4CE33BA2EC345F125 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.sergiiziborov.splitpicnic.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SplitPicnic;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		141482E0898AA198C3346270 /* Build configuration list for PBXNativeTarget "SplitPicnic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				278A8E88F68B45D7A1C52ADE /* Debug */,
+				824FCB441F048231FC3C3D91 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		751089A5F6CF755DD912015D /* Build configuration list for PBXNativeTarget "SplitPicnicUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC5B48E4CE33BA2EC345F125 /* Debug */,
+				D137E4210F58D42F4E6AE8D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8EC1926AEBAD9DF2C33EEB26 /* Build configuration list for PBXNativeTarget "SplitPicnicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D4BBA9821FAF034D189FD7F6 /* Debug */,
+				0E5D25E046E4C6661C73BF57 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D551377282B1EDC767426D59 /* Build configuration list for PBXProject "SplitPicnic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA16B4363A5A862240CC0C57 /* Debug */,
+				0E42D2D276400BA00DFAF1BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EA71E0903AE3F68829D78080 /* Project object */;
+}
