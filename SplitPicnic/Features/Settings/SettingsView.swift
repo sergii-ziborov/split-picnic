@@ -13,6 +13,20 @@ struct SettingsView: View {
                 ScreenHeader(title: loc["settings"]) { model.goHome() }
 
                 ScrollView(showsIndicators: false) {
+                    Button {
+                        model.openTutorial(from: .settings)
+                    } label: {
+                        Label(loc["howToPlay"], systemImage: "play.rectangle.fill")
+                            .font(.spBody(17))
+                            .foregroundStyle(Palette.ink)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(.white.opacity(0.94), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+                    .accessibilityIdentifier("settings-tutorial")
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+
                     WoodPanel {
                         VStack(spacing: 12) {
                             toggleRow("speaker.wave.2.fill", loc["sound"], loc["soundSub"], $model.progress.soundEnabled)

@@ -15,12 +15,47 @@ struct L10n: Equatable, Sendable {
         ],
         "play": [.english: "Play", .russian: "Играть", .ukrainian: "Грати"],
         "worlds": [.english: "Worlds", .russian: "Миры", .ukrainian: "Світи"],
+        "picnic": [.english: "Picnic", .russian: "Пикник", .ukrainian: "Пікнік"],
+        "picnicPreparing": [
+            .english: "Preparing the picnic",
+            .russian: "Готовим пикник",
+            .ukrainian: "Готуємо пікнік",
+        ],
+        "picnicTableSet": [
+            .english: "The table is being set",
+            .russian: "Накрываем на стол",
+            .ukrainian: "Накриваємо на стіл",
+        ],
+        "picnicFriendsArriving": [
+            .english: "Friends are arriving",
+            .russian: "Собираются друзья",
+            .ukrainian: "Збираються друзі",
+        ],
+        "picnicInFullSwing": [
+            .english: "Picnic in full swing",
+            .russian: "Пикник в самом разгаре",
+            .ukrainian: "Пікнік у самому розпалі",
+        ],
+        "picnicComplete": [
+            .english: "Picnic complete!",
+            .russian: "Пикник удался!",
+            .ukrainian: "Пікнік вдався!",
+        ],
         "daily": [.english: "Daily Puzzle", .russian: "Загадка дня", .ukrainian: "Загадка дня"],
         "collection": [.english: "Collection", .russian: "Коллекция", .ukrainian: "Колекція"],
         "settings": [.english: "Settings", .russian: "Настройки", .ukrainian: "Налаштування"],
+        "level": [.english: "Level", .russian: "Уровень", .ukrainian: "Рівень"],
+        "difficulty": [.english: "Difficulty", .russian: "Сложность", .ukrainian: "Складність"],
         "slice": [.english: "Slice!", .russian: "Резать!", .ukrainian: "Різати!"],
         "tryAgain": [.english: "Try Again", .russian: "Ещё раз", .ukrainian: "Ще раз"],
         "showHint": [.english: "Show a Hint", .russian: "Подсказка", .ukrainian: "Підказка"],
+        "replayHint": [.english: "Replay hint", .russian: "Повторить подсказку", .ukrainian: "Повторити підказку"],
+        "hintGuide": [
+            .english: "Swipe along the glowing path.",
+            .russian: "Проведи пальцем по светящейся дорожке.",
+            .ukrainian: "Проведи пальцем по сяйливій доріжці.",
+        ],
+        "watchTutorial": [.english: "Watch demo", .russian: "Показать пример", .ukrainian: "Показати приклад"],
         "nextLevel": [.english: "Next Level", .russian: "Дальше", .ukrainian: "Далі"],
         "replay": [.english: "Replay", .russian: "Повтор", .ukrainian: "Повтор"],
         "perfect": [.english: "Perfect Slice!", .russian: "Идеальный кусок!", .ukrainian: "Ідеальний шматок!"],
@@ -66,10 +101,22 @@ struct L10n: Equatable, Sendable {
             .ukrainian: "Спростити анімації",
         ],
         "howToPlay": [.english: "How to Play", .russian: "Как играть", .ukrainian: "Як грати"],
+        "replayTutorialClip": [.english: "Replay animation", .russian: "Повторить анимацию", .ukrainian: "Повторити анімацію"],
+        "done": [.english: "Done", .russian: "Готово", .ukrainian: "Готово"],
+        "cutTutorialClip": [
+            .english: "A curved finger swipe cuts and separates the pizza",
+            .russian: "Кривой жест пальцем разрезает пиццу на две части",
+            .ukrainian: "Кривий рух пальцем розрізає піцу на дві частини",
+        ],
+        "servingTutorialClip": [
+            .english: "Each sliced half goes to its matching guest",
+            .russian: "Каждая половинка отправляется своему гостю",
+            .ukrainian: "Кожна половинка дістається своєму гостю",
+        ],
         "drawLine": [
-            .english: "Draw one straight line to split the food.",
-            .russian: "Проведи одну прямую линию, чтобы разделить угощение.",
-            .ukrainian: "Проведи одну пряму лінію, щоб розділити частування.",
+            .english: "Slash freely through the food — straight or curved. It follows your finger and slices when you let go.",
+            .russian: "Режь свободным движением — прямо или по кривой. Разрез повторит путь пальца.",
+            .ukrainian: "Ріж вільним рухом — прямо або по кривій. Розріз повторить шлях пальця.",
         ],
         "next": [.english: "Next", .russian: "Дальше", .ukrainian: "Далі"],
         "theRest": [.english: "You get the rest!", .russian: "Тебе остальное!", .ukrainian: "Тобі решта!"],
@@ -80,6 +127,21 @@ struct L10n: Equatable, Sendable {
             .ukrainian: "Гарні шматки ведуть до світлих днів",
         ],
         "themes": [.english: "Themes", .russian: "Темы", .ukrainian: "Теми"],
+        "themeRotationHint": [
+            .english: "The tablecloth changes as you play. Choose where the cycle begins.",
+            .russian: "Скатерть меняется по мере игры. Выбери, с какой начать.",
+            .ukrainian: "Скатертина змінюється під час гри. Обери, з якої почати.",
+        ],
+        "rotationStart": [
+            .english: "Cycle starts here",
+            .russian: "Начало смены",
+            .ukrainian: "Початок зміни",
+        ],
+        "useAsStart": [
+            .english: "Start with this",
+            .russian: "Начать с этой",
+            .ukrainian: "Почати з цієї",
+        ],
         "food": [.english: "Food", .russian: "Еда", .ukrainian: "Їжа"],
         "guests": [.english: "Guests", .russian: "Гости", .ukrainian: "Гості"],
         "owned": [.english: "Owned", .russian: "Есть", .ukrainian: "Є"],
@@ -107,10 +169,30 @@ struct L10n: Equatable, Sendable {
             .russian: "Куски должны быть почти равными.",
             .ukrainian: "Шматки мають бути майже рівними.",
         ],
-        "adjust": [
-            .english: "Drag the handles. Slice when it looks right.",
-            .russian: "Подвинь ручки. Режь, когда линия на месте.",
-            .ukrainian: "Посунь ручки. Ріж, коли лінія на місці.",
+        "fairChallenge": [
+            .english: "Fair pieces",
+            .russian: "Равные куски",
+            .ukrainian: "Рівні шматки",
+        ],
+        "cleanChallenge": [
+            .english: "Don't touch toppings",
+            .russian: "Не задень начинку",
+            .ukrainian: "Не зачепи начинку",
+        ],
+        "fairMiss": [
+            .english: "The pieces were too different in size.",
+            .russian: "Куски получились слишком разными.",
+            .ukrainian: "Шматки вийшли надто різними.",
+        ],
+        "cleanMiss": [
+            .english: "The swipe touched a topping.",
+            .russian: "Разрез задел начинку.",
+            .ukrainian: "Розріз зачепив начинку.",
+        ],
+        "swipeToSlice": [
+            .english: "Slash freely — straight or curved",
+            .russian: "Режь свободно — прямо или по кривой",
+            .ukrainian: "Ріж вільно — прямо або по кривій",
         ],
         "tutorial2": [
             .english: "Each guest has a request. One cut has to make both of them happy.",
@@ -118,9 +200,9 @@ struct L10n: Equatable, Sendable {
             .ukrainian: "У кожного гостя своє замовлення. Один розріз має порадувати обох.",
         ],
         "tutorial3": [
-            .english: "You can nudge the line before you confirm. This is a puzzle, not a test of your fingertip.",
-            .russian: "Линию можно поправить до подтверждения. Это головоломка, а не экзамен на точность пальца.",
-            .ukrainian: "Лінію можна поправити до підтвердження. Це головоломка, а не іспит на точність пальця.",
+            .english: "Later picnics mix exact counts, forbidden toppings, fair portions, and clean swipes that touch no food. A hint shows the best path.",
+            .russian: "Дальше будут точные количества, запретные начинки, равные куски и чистые разрезы между начинками. Подсказка покажет лучший путь.",
+            .ukrainian: "Далі будуть точні кількості, заборонені начинки, рівні шматки й чисті розрізи між начинками. Підказка покаже найкращий шлях.",
         ],
         "startPicnic": [
             .english: "Start the picnic",
@@ -129,9 +211,9 @@ struct L10n: Equatable, Sendable {
         ],
         "version": [.english: "Version", .russian: "Версия", .ukrainian: "Версія"],
         "about": [
-            .english: "Split Picnic is a short slicing puzzle. Draw one straight line. Feed two guests. No account, no ads, no tracking.",
-            .russian: "Split Picnic — короткая головоломка на один разрез. Накорми двух гостей. Без аккаунта, рекламы и слежки.",
-            .ukrainian: "Split Picnic — коротка головоломка на один розріз. Нагодуй двох гостей. Без акаунта, реклами і стеження.",
+            .english: "Split Picnic is a short slicing puzzle. Swipe once. Feed two guests. No account, no ads, no tracking.",
+            .russian: "Split Picnic — короткая головоломка на один жест. Накорми двух гостей. Без аккаунта, рекламы и слежки.",
+            .ukrainian: "Split Picnic — коротка головоломка на один жест. Нагодуй двох гостей. Без акаунта, реклами і стеження.",
         ],
     ]
 }
@@ -163,6 +245,18 @@ enum ToppingCopy {
         case (.cherry, .english): "cherries"
         case (.cherry, .russian): "вишня"
         case (.cherry, .ukrainian): "вишня"
+        case (.pineapple, .english): "pineapple"
+        case (.pineapple, .russian): "ананас"
+        case (.pineapple, .ukrainian): "ананас"
+        case (.onion, .english): "red onion"
+        case (.onion, .russian): "красный лук"
+        case (.onion, .ukrainian): "червону цибулю"
+        case (.corn, .english): "corn"
+        case (.corn, .russian): "кукурузу"
+        case (.corn, .ukrainian): "кукурудзу"
+        case (.mozzarella, .english): "mozzarella"
+        case (.mozzarella, .russian): "моцареллу"
+        case (.mozzarella, .ukrainian): "моцарелу"
         }
     }
 

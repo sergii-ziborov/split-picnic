@@ -16,26 +16,32 @@ struct RootView: View {
     @Environment(AppModel.self) private var model
 
     var body: some View {
-        Group {
-            switch model.screen {
-            case .home:
-                HomeView()
-            case .tutorial:
-                TutorialView()
-            case .play:
-                PlayView()
-            case .result:
-                ResultView()
-            case .fail:
-                FailView()
-            case .worlds:
-                WorldsView()
-            case .collection:
-                CollectionView()
-            case .daily:
-                DailyView()
-            case .settings:
-                SettingsView()
+        ZStack {
+            // Kept at the window root so the artwork also paints behind the status
+            // bar and home indicator on a physical device.
+            PicnicBackdrop(asset: backdrop.asset, dim: backdrop.dim)
+
+            Group {
+                switch model.screen {
+                case .home:
+                    HomeView()
+                case .tutorial:
+                    TutorialView()
+                case .play:
+                    PlayView()
+                case .result:
+                    ResultView()
+                case .fail:
+                    FailView()
+                case .worlds:
+                    WorldsView()
+                case .collection:
+                    CollectionView()
+                case .daily:
+                    DailyView()
+                case .settings:
+                    SettingsView()
+                }
             }
         }
         .animation(.easeInOut(duration: 0.22), value: screenKey)
@@ -54,6 +60,21 @@ struct RootView: View {
         case .collection: "collection"
         case .daily: "daily"
         case .settings: "settings"
+        }
+    }
+
+    private var backdrop: (asset: String, dim: Double) {
+        switch model.screen {
+        case .worlds:
+            return ("WorldsMap", 0.08)
+        case .play:
+            return (model.session?.context.world.backgroundAsset ?? "PicnicBackground", 0.12)
+        case .result, .fail:
+            return (model.lastOutcome?.world.backgroundAsset ?? "PicnicBackground", 0)
+        case .collection:
+            return ("PicnicBackground", 0.05)
+        default:
+            return ("PicnicBackground", 0)
         }
     }
 }

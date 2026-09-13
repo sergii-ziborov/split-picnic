@@ -39,6 +39,10 @@ enum DishLayout {
         case .strawberry: 0.08
         case .blueberry: 0.05
         case .cherry: 0.06
+        case .pineapple: 0.075
+        case .onion: 0.072
+        case .corn: 0.075
+        case .mozzarella: 0.072
         }
     }
 

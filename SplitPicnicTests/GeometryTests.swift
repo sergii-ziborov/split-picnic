@@ -39,6 +39,81 @@ struct GeometryTests {
         #expect(Cut.vertical.chord() != nil)
         #expect(Cut(angle: 0, offset: 1.2).chord() == nil)
     }
+
+    @Test("A deliberate vertical swipe becomes a vertical cut")
+    func swipeCreatesCut() {
+        let center = CGPoint(x: 100, y: 100)
+        let cut = SwipeGeometry.cut(
+            from: CGPoint(x: 100, y: 30),
+            to: CGPoint(x: 100, y: 170),
+            center: center,
+            radius: 80
+        )
+        #expect(cut != nil)
+        #expect(abs(cut!.offset) < 1e-9)
+        #expect(abs(abs(cut!.normal.x) - 1) < 1e-9)
+    }
+
+    @Test("Taps and swipes that miss the dish do not slice")
+    func invalidSwipesAreIgnored() {
+        let center = CGPoint(x: 100, y: 100)
+        #expect(SwipeGeometry.cut(
+            from: CGPoint(x: 98, y: 98),
+            to: CGPoint(x: 104, y: 104),
+            center: center,
+            radius: 80
+        ) == nil)
+        #expect(SwipeGeometry.cut(
+            from: CGPoint(x: 10, y: 10),
+            to: CGPoint(x: 10, y: 190),
+            center: center,
+            radius: 80
+        ) == nil)
+    }
+
+    @Test("A curved swipe keeps its bends and routes toppings around them")
+    func curvedSwipeCreatesFreeformCut() {
+        let center = CGPoint(x: 100, y: 100)
+        let cut = SwipeGeometry.cut(
+            from: [
+                CGPoint(x: 100, y: 15),
+                CGPoint(x: 108, y: 55),
+                CGPoint(x: 136, y: 100),
+                CGPoint(x: 108, y: 145),
+                CGPoint(x: 100, y: 185),
+            ],
+            center: center,
+            radius: 80
+        )
+
+        #expect(cut != nil)
+        #expect(cut?.isFreeform == true)
+        #expect((cut?.pathPoints.count ?? 0) >= 5)
+        // The curve bows right: this point is right of the end-to-end chord but
+        // still on the left-hand piece created by the actual finger trail.
+        #expect(cut?.half(of: Vec2(x: 0.20, y: 0)) == .negative)
+        #expect(cut?.half(of: Vec2(x: 0.70, y: 0)) == .positive)
+        let ratios = cut?.areaRatios
+        #expect(abs((ratios?.positive ?? 0) + (ratios?.negative ?? 0) - 1) < 1e-9)
+    }
+
+    @Test("A looping swipe is rejected instead of making ambiguous pieces")
+    func selfIntersectingSwipeIsIgnored() {
+        let center = CGPoint(x: 100, y: 100)
+        let cut = SwipeGeometry.cut(
+            from: [
+                CGPoint(x: 100, y: 15),
+                CGPoint(x: 135, y: 75),
+                CGPoint(x: 70, y: 125),
+                CGPoint(x: 135, y: 125),
+                CGPoint(x: 70, y: 75),
+                CGPoint(x: 100, y: 185),
+            ],
+            center: center,
+            radius: 80
+        )
+        #expect(cut == nil)
+    }
 }
 
 struct EvaluatorTests {
@@ -70,6 +145,23 @@ struct EvaluatorTests {
         #expect(SliceEvaluator.areaOK(cut: Cut(angle: 0, offset: 0.5), minRatio: nil))
     }
 
+    @Test("Clean-slice rule detects contact with topping artwork")
+    func cleanSlice() {
+        let topping = Topping(
+            id: 0,
+            kind: .pepperoni,
+            position: Vec2(x: 0.05, y: 0.2),
+            radius: 0.085
+        )
+        #expect(!SliceEvaluator.isClean(toppings: [topping], cut: .vertical, required: true))
+        #expect(SliceEvaluator.isClean(
+            toppings: [topping],
+            cut: Cut(angle: 0, offset: 0.35),
+            required: true
+        ))
+        #expect(SliceEvaluator.isClean(toppings: [topping], cut: .vertical, required: false))
+    }
+
     @Test("Stars reward a clean first slice")
     func starPolicy() {
         #expect(StarRating.stars(attempts: 1, hintsUsed: 0) == 3)
@@ -97,12 +189,13 @@ struct CatalogTests {
                     dog: level.dog,
                     cat: level.cat,
                     minAreaRatio: level.minAreaRatio,
+                    requiresCleanCut: level.requiresCleanCut,
                     attempts: 1,
                     hintsUsed: 0
                 )
                 if !outcome.success {
                     failures.append(
-                        "\(level.id) dog=\(outcome.dogHappy) cat=\(outcome.catHappy) area=\(outcome.areaOK) dogCounts=\(outcome.dogCounts) catCounts=\(outcome.catCounts)"
+                        "\(level.id) dog=\(outcome.dogHappy) cat=\(outcome.catHappy) area=\(outcome.areaOK) clean=\(outcome.cleanCut) dogCounts=\(outcome.dogCounts) catCounts=\(outcome.catCounts)"
                     )
                 }
             }
@@ -124,6 +217,7 @@ struct CatalogTests {
             dog: level.dog,
             cat: level.cat,
             minAreaRatio: level.minAreaRatio,
+            requiresCleanCut: level.requiresCleanCut,
             attempts: 1,
             hintsUsed: 0
         )
@@ -155,13 +249,63 @@ struct CatalogTests {
         #expect(a.0 == b.0 && a.1 == b.1 && a.2 == b.2)
     }
 
-    @Test("Catalog has eight levels in every world")
-    func eightEach() {
+    @Test("Catalog has twelve levels in every world")
+    func twelveEach() {
         for world in WorldID.allCases {
-            #expect(LevelCatalog.levels(for: world).count == 8)
+            #expect(LevelCatalog.levels(for: world).count == 12)
         }
-        #expect(LevelCatalog.next(after: PlayContext(world: .sunsetBakery, levelIndex: 7, seed: 1, isDaily: false, theme: .pizzaParty, plate: .paw)) == nil)
-        #expect(LevelCatalog.next(after: PlayContext(world: .pizzaPark, levelIndex: 7, seed: 1, isDaily: false, theme: .pizzaParty, plate: .paw))?.0 == .berryMeadow)
+        #expect(LevelCatalog.next(after: PlayContext(world: .sunsetBakery, levelIndex: 11, seed: 1, isDaily: false, theme: .pizzaParty, plate: .paw)) == nil)
+        #expect(LevelCatalog.next(after: PlayContext(world: .pizzaPark, levelIndex: 11, seed: 1, isDaily: false, theme: .pizzaParty, plate: .paw))?.0 == .berryMeadow)
+    }
+
+    @Test("Picnics rotate through mixed guest casts")
+    func guestCastVariety() {
+        var casts: Set<String> = []
+        for world in WorldID.allCases {
+            for levelIndex in 0..<12 {
+                let context = PlayContext(
+                    world: world,
+                    levelIndex: levelIndex,
+                    seed: 1,
+                    isDaily: false,
+                    theme: .pizzaParty,
+                    plate: .paw
+                )
+                let dog = context.guestVariant(for: .dog)
+                let cat = context.guestVariant(for: .cat)
+                casts.insert("\(dog.rawValue)-\(cat.rawValue)")
+            }
+        }
+
+        #expect(casts.count == 7)
+        #expect(casts.contains("woodland-woodland"))
+        #expect(casts.contains("classic-woodland"))
+        #expect(casts.contains("sunny-classic"))
+    }
+
+    @Test("Unlocked picnic themes rotate through the level journey")
+    func themeRotation() {
+        var progress = ProgressState.fresh
+        #expect(progress.theme(for: .pizzaPark, levelIndex: 9) == .pizzaParty)
+
+        for level in LevelCatalog.levels(for: .pizzaPark).prefix(8) {
+            progress.starsByLevel[level.id] = 3
+        }
+        let themes = (0..<12).map { progress.theme(for: .pizzaPark, levelIndex: $0) }
+        #expect(Set(themes.map(\.rawValue)).count >= 3)
+        #expect(themes[0] != themes[3])
+        #expect(themes.allSatisfy { progress.isThemeUnlocked($0) })
+
+        progress.selectedTheme = .berryPicnic
+        #expect(progress.theme(for: .pizzaPark, levelIndex: 0) == .berryPicnic)
+    }
+
+    @Test("Pizza bases alternate without changing on retry")
+    func pizzaAppearanceVariety() {
+        let first = PlayContext(world: .pizzaPark, levelIndex: 0, seed: 1, isDaily: false, theme: .pizzaParty, plate: .paw)
+        let second = PlayContext(world: .pizzaPark, levelIndex: 2, seed: 2, isDaily: false, theme: .pizzaParty, plate: .paw)
+        #expect(first.pizzaBaseAsset != second.pizzaBaseAsset)
+        #expect(first.pizzaBaseAsset == PlayContext(world: .pizzaPark, levelIndex: 0, seed: 999, isDaily: false, theme: .pizzaParty, plate: .paw).pizzaBaseAsset)
     }
 }
 

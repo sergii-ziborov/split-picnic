@@ -34,11 +34,15 @@ struct PicnicBackdrop: View {
     var dim: Double = 0.0
 
     var body: some View {
-        Image(asset)
-            .resizable()
-            .scaledToFill()
-            .overlay(Color.black.opacity(dim))
-            .ignoresSafeArea()
+        GeometryReader { geo in
+            Image(asset)
+                .resizable()
+                .scaledToFill()
+                .frame(width: geo.size.width, height: geo.size.height)
+                .overlay(Color.black.opacity(dim))
+                .clipped()
+        }
+            .ignoresSafeArea(.container, edges: .all)
             .allowsHitTesting(false)
     }
 }
@@ -59,11 +63,13 @@ struct SPButton: View {
                         .font(.system(size: 20, weight: .bold))
                 }
                 Text(title)
-                    .font(.spDisplay(kind == .play ? 28 : 18))
+                    .font(.spDisplay(kind == .play ? 22 : 17))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
             }
             .foregroundStyle(foreground)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, kind == .play ? 16 : 13)
+            .padding(.vertical, kind == .play ? 14 : 12)
             .background(background, in: Capsule())
             .overlay(
                 Capsule()
@@ -136,8 +142,10 @@ struct ScreenHeader: View {
                 .accessibilityIdentifier("back-button")
             Spacer()
             Text(title)
-                .font(.spDisplay(28))
+                .font(.spDisplay(24))
                 .foregroundStyle(Palette.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
                 .shadow(color: .white.opacity(0.8), radius: 4)
             Spacer()
             Color.clear.frame(width: 44, height: 44)

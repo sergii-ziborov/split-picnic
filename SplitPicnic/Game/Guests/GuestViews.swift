@@ -1,25 +1,68 @@
 import SwiftUI
 
 struct GuestPortrait: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     var guest: GuestID
     var happy: Bool
     var size: CGFloat = 140
+    var variant: GuestVariant = .classic
 
     var body: some View {
-        Image(asset)
-            .resizable()
-            .scaledToFit()
+        TimelineView(.animation(minimumInterval: 1 / 30, paused: reduceMotion)) { timeline in
+            let time = timeline.date.timeIntervalSinceReferenceDate
+            let phase = time * (happy ? 2.7 : 5.5) + (guest == .dog ? 0 : 0.8)
+            let wave = reduceMotion ? 0 : sin(phase)
+
+            ZStack {
+                Image(asset)
+                    .resizable()
+                    .scaledToFit()
+                    .scaleEffect(1 + (happy ? wave * 0.018 : 0))
+                    .rotationEffect(.degrees(happy ? wave * 1.1 : wave * 0.7))
+                    .offset(x: happy ? 0 : wave * 1.4, y: happy ? wave * -2.2 : abs(wave) * 1.2)
+
+                if happy {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: size * 0.16, weight: .bold))
+                        .foregroundStyle(Palette.gold)
+                        .offset(x: size * 0.34, y: -size * 0.34 - wave * 3)
+                        .opacity(0.55 + wave * 0.35)
+                }
+            }
             .frame(width: size, height: size)
-            .shadow(color: .black.opacity(0.18), radius: 8, y: 4)
-            .accessibilityLabel(guest == .dog ? "Dog" : "Cat")
+            .clipped()
+            .shadow(color: .black.opacity(0.18), radius: 6, y: 3)
+        }
+        .accessibilityLabel(accessibilityName)
+        .accessibilityIdentifier("guest-\(guest.rawValue)-\(variant.rawValue)")
     }
 
     private var asset: String {
-        switch (guest, happy) {
-        case (.dog, true): "DogHappy"
-        case (.dog, false): "DogSad"
-        case (.cat, true): "CatHappy"
-        case (.cat, false): "CatSad"
+        switch (variant, guest, happy) {
+        case (.classic, .dog, true): "DogHappy"
+        case (.classic, .dog, false): "DogSad"
+        case (.classic, .cat, true): "CatHappy"
+        case (.classic, .cat, false): "CatSad"
+        case (.sunny, .dog, true): "DogSunnyHappy"
+        case (.sunny, .dog, false): "DogSunnySad"
+        case (.sunny, .cat, true): "CatGingerHappy"
+        case (.sunny, .cat, false): "CatGingerSad"
+        case (.woodland, .dog, true): "GuestBunnyHappy"
+        case (.woodland, .dog, false): "GuestBunnySad"
+        case (.woodland, .cat, true): "GuestRaccoonHappy"
+        case (.woodland, .cat, false): "GuestRaccoonSad"
+        }
+    }
+
+    private var accessibilityName: String {
+        switch (variant, guest) {
+        case (.classic, .dog): "Pip the puppy"
+        case (.classic, .cat): "Miso the kitten"
+        case (.sunny, .dog): "Sunny the puppy"
+        case (.sunny, .cat): "Ginger the kitten"
+        case (.woodland, .dog): "Clover the bunny"
+        case (.woodland, .cat): "Rascal the raccoon"
         }
     }
 }
@@ -61,12 +104,13 @@ struct GuestOrderCard: View {
                     }
                 }
                 Text(ToppingCopy.phrase(order, language: language))
-                    .font(.spBody(compact ? 11 : 13))
+                    .font(.spBody(compact ? 12 : 14))
                     .foregroundStyle(Palette.ink)
                     .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(compact ? 2 : 3)
+                    .minimumScaleFactor(0.8)
             }
-            .frame(maxWidth: compact ? 150 : 180)
+            .frame(maxWidth: compact ? 156 : 180)
         }
     }
 }

@@ -3,18 +3,13 @@
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "SplitPicnic" / "Resources" / "Assets.xcassets"
-SESSION = Path(
-    "/Users/serhiirihgt/.grok/sessions/"
-    "%2FUsers%2Fserhiirihgt%2Fdev/01a085f2-e658-7670-b280-8c3edac1f9fd/images"
-)
-
-
 def save_imageset(name: str, image: Image.Image) -> None:
     folder = ASSETS / f"{name}.imageset"
     folder.mkdir(parents=True, exist_ok=True)
@@ -108,6 +103,12 @@ def copy_jpg_png(src: Path, name: str, size: tuple[int, int] | None = None) -> N
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source_dir", type=Path, help="Directory containing the original numbered JPG artwork")
+    source_dir = parser.parse_args().source_dir.expanduser().resolve()
+    if not source_dir.is_dir():
+        parser.error(f"Source directory does not exist: {source_dir}")
+
     characters = {
         "DogHappy": "4.jpg",
         "CatHappy": "5.jpg",
@@ -115,23 +116,23 @@ def main() -> None:
         "CatSad": "8.jpg",
     }
     for name, file in characters.items():
-        keyed = trim(chroma_key(SESSION / file), pad=12)
+        keyed = trim(chroma_key(source_dir / file), pad=12)
         save_imageset(name, keyed)
 
-    icon = Image.open(SESSION / "2.jpg").convert("RGB").resize((1024, 1024), Image.Resampling.LANCZOS)
+    icon = Image.open(source_dir / "2.jpg").convert("RGB").resize((1024, 1024), Image.Resampling.LANCZOS)
     icon_dir = ASSETS / "AppIcon.appiconset"
     icon_dir.mkdir(parents=True, exist_ok=True)
     icon.save(icon_dir / "AppIcon.png", "PNG", optimize=True)
     print(f"wrote AppIcon 1024x1024")
 
-    mark = Image.open(SESSION / "1.jpg").convert("RGB").resize((512, 512), Image.Resampling.LANCZOS)
+    mark = Image.open(source_dir / "1.jpg").convert("RGB").resize((512, 512), Image.Resampling.LANCZOS)
     save_imageset("BrandMark", mark.convert("RGBA"))
 
-    copy_jpg_png(SESSION / "3.jpg", "PicnicBackground", (1170, 2080))
-    copy_jpg_png(SESSION / "6.jpg", "WorldsMap", (1170, 2080))
-    copy_jpg_png(SESSION / "10.jpg", "BerryBackground", (1170, 2080))
-    copy_jpg_png(SESSION / "9.jpg", "ForestBackground", (1170, 2080))
-    copy_jpg_png(SESSION / "11.jpg", "BakeryBackground", (1170, 2080))
+    copy_jpg_png(source_dir / "3.jpg", "PicnicBackground", (1170, 2080))
+    copy_jpg_png(source_dir / "6.jpg", "WorldsMap", (1170, 2080))
+    copy_jpg_png(source_dir / "10.jpg", "BerryBackground", (1170, 2080))
+    copy_jpg_png(source_dir / "9.jpg", "ForestBackground", (1170, 2080))
+    copy_jpg_png(source_dir / "11.jpg", "BakeryBackground", (1170, 2080))
 
 
 if __name__ == "__main__":

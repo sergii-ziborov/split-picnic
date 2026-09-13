@@ -60,9 +60,20 @@ struct CollectionView: View {
     }
 
     private var themeGrid: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-            ForEach(ThemeID.allCases) { theme in
-                themeCard(theme)
+        VStack(spacing: 12) {
+            Text(model.loc["themeRotationHint"])
+                .font(.spBody(12))
+                .foregroundStyle(Palette.ink)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .background(.white.opacity(0.92), in: Capsule())
+
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                ForEach(ThemeID.allCases) { theme in
+                    themeCard(theme)
+                }
             }
         }
         .padding(16)
@@ -94,14 +105,14 @@ struct CollectionView: View {
                 .foregroundStyle(Palette.ink)
 
             if equipped {
-                Text(loc["equipped"])
+                Text(loc["rotationStart"])
                     .font(.spBody(12))
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                     .background(Palette.moss, in: Capsule())
             } else if unlocked {
-                Button(loc["owned"]) { model.selectTheme(theme) }
+                Button(loc["useAsStart"]) { model.selectTheme(theme) }
                     .font(.spBody(12))
                     .foregroundStyle(Palette.ink)
                     .frame(maxWidth: .infinity)
@@ -151,6 +162,30 @@ struct CollectionView: View {
                 VStack {
                     GuestPortrait(guest: .cat, happy: true, size: 140)
                     Text("Miso")
+                        .font(.spBody(16))
+                }
+            }
+            HStack(spacing: 16) {
+                VStack {
+                    GuestPortrait(guest: .dog, happy: true, size: 140, variant: .sunny)
+                    Text("Sunny")
+                        .font(.spBody(16))
+                }
+                VStack {
+                    GuestPortrait(guest: .cat, happy: true, size: 140, variant: .sunny)
+                    Text("Ginger")
+                        .font(.spBody(16))
+                }
+            }
+            HStack(spacing: 16) {
+                VStack {
+                    GuestPortrait(guest: .dog, happy: true, size: 140, variant: .woodland)
+                    Text("Clover")
+                        .font(.spBody(16))
+                }
+                VStack {
+                    GuestPortrait(guest: .cat, happy: true, size: 140, variant: .woodland)
+                    Text("Rascal")
                         .font(.spBody(16))
                 }
             }

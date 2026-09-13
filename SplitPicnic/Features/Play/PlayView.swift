@@ -2,17 +2,20 @@ import SwiftUI
 
 struct PlayView: View {
     @Environment(AppModel.self) private var model
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
     @State private var showPause = false
     @State private var splitProgress: Double = 0
-    @State private var dragStart: CGPoint?
-    @State private var activeHandle: Handle?
-    @State private var dishFrame: CGRect = .zero
-
-    private enum Handle { case a, b, body }
+    @State private var swipePoints: [CGPoint] = []
+    @State private var hintStart = Date()
 
     var body: some View {
         if let session = model.session {
             content(session)
+                .onAppear {
+                    if session.phase == .resolved, session.draft != nil {
+                        splitProgress = 1
+                    }
+                }
                 .onChange(of: session.phase) { _, phase in
                     if phase == .slicing {
                         animateSlice()
@@ -25,21 +28,29 @@ struct PlayView: View {
 
     private func content(_ session: PlaySession) -> some View {
         let loc = model.loc
-        let cloth = session.context.theme.cloth
         return ZStack {
-            PicnicBackdrop(asset: session.context.world.backgroundAsset, dim: 0.08)
-            Gingham(color: Color(red: cloth.red, green: cloth.green, blue: cloth.blue), cell: 22)
-                .opacity(0.55)
-                .ignoresSafeArea()
-
-            VStack(spacing: 8) {
+            PicnicBackdrop(asset: session.context.world.backgroundAsset, dim: 0.12)
+                .overlay {
+                    LinearGradient(
+                        colors: [
+                            themeColor(session.context.theme).opacity(0.12),
+                            .clear,
+                            themeColor(session.context.theme).opacity(0.16),
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .ignoresSafeArea()
+                }
+                .allowsHitTesting(false)
+            VStack(spacing: 6) {
                 hud(session, loc: loc)
-                guests(session)
+                guests(session, size: 72, compact: true)
                 dish(session)
                     .frame(maxHeight: .infinity)
                 bottom(session, loc: loc)
             }
-            .padding(.bottom, 16)
+            .padding(.bottom, 8)
 
             if showPause {
                 pauseOverlay(loc: loc)
@@ -53,10 +64,21 @@ struct PlayView: View {
                 .accessibilityIdentifier("pause-button")
             Spacer()
             VStack(spacing: 2) {
-                Text("Level \(session.level.number)")
+                Text("\(loc["level"]) \(session.level.number)")
                     .font(.spBody(14))
                     .foregroundStyle(Palette.ink)
-                StarRow(stars: model.progress.stars(for: session.level), size: 14)
+                HStack(spacing: 8) {
+                    StarRow(stars: model.progress.stars(for: session.level), size: 12)
+                    difficultyDots(session.level.difficulty)
+                }
+                HStack(spacing: 4) {
+                    Circle()
+                        .fill(themeColor(session.context.theme))
+                        .frame(width: 7, height: 7)
+                    Text(session.context.theme.title)
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundStyle(Palette.inkSoft)
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
@@ -64,58 +86,80 @@ struct PlayView: View {
             .shadow(color: .black.opacity(0.1), radius: 6, y: 3)
             Spacer()
             Button {
-                model.useHint()
+                if session.showHint {
+                    Feedback.tap(sound: model.progress.soundEnabled, haptics: model.progress.hapticsEnabled)
+                } else {
+                    model.useHint()
+                }
+                hintStart = Date()
             } label: {
                 ZStack(alignment: .topTrailing) {
-                    Image(systemName: "lightbulb.fill")
+                    Image(systemName: session.showHint ? "arrow.clockwise" : "lightbulb.fill")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(session.hintsLeft > 0 ? Palette.gold : Palette.ink.opacity(0.3))
+                        .foregroundStyle(session.showHint ? Palette.moss : session.hintsLeft > 0 ? Palette.gold : Palette.ink.opacity(0.3))
                         .frame(width: 44, height: 44)
                         .background(.white.opacity(0.92), in: Circle())
                         .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
-                    if session.hintsLeft > 0 {
+                    if session.hintsLeft > 0 && !session.showHint {
                         Text("\(session.hintsLeft)")
                             .font(.spBody(10))
                             .foregroundStyle(.white)
                             .padding(4)
                             .background(Palette.coral, in: Circle())
-                            .offset(x: 6, y: -4)
+                            .offset(x: 4, y: -2)
                     }
                 }
             }
             .buttonStyle(.plain)
-            .disabled(session.hintsLeft == 0 || session.phase != .aiming)
+            .disabled((session.hintsLeft == 0 && !session.showHint) || session.phase != .aiming)
+            .accessibilityLabel(session.showHint ? loc["replayHint"] : loc["showHint"])
             .accessibilityIdentifier("hint-button")
         }
         .padding(.horizontal, 16)
-        .padding(.top, 8)
+        .padding(.top, 10)
     }
 
-    private func guests(_ session: PlaySession) -> some View {
-        HStack(alignment: .bottom, spacing: 8) {
-            VStack(spacing: 6) {
-                GuestOrderCard(
-                    guest: .dog,
-                    order: session.level.dog,
-                    language: model.progress.language,
-                    happy: session.lastSlice.map(\.dogHappy),
-                    compact: true
-                )
-                GuestPortrait(guest: .dog, happy: session.lastSlice?.dogHappy ?? true, size: 108)
-            }
-            Spacer(minLength: 0)
-            VStack(spacing: 6) {
-                GuestOrderCard(
-                    guest: .cat,
-                    order: session.level.cat,
-                    language: model.progress.language,
-                    happy: session.lastSlice.map(\.catHappy),
-                    compact: true
-                )
-                GuestPortrait(guest: .cat, happy: session.lastSlice?.catHappy ?? true, size: 108)
-            }
+    private func guests(_ session: PlaySession, size: CGFloat, compact: Bool) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            guestColumn(
+                .dog,
+                order: session.level.dog,
+                happy: session.lastSlice?.dogHappy,
+                size: size,
+                compact: compact,
+                variant: session.context.guestVariant(for: .dog)
+            )
+            guestColumn(
+                .cat,
+                order: session.level.cat,
+                happy: session.lastSlice?.catHappy,
+                size: size,
+                compact: compact,
+                variant: session.context.guestVariant(for: .cat)
+            )
         }
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 10)
+    }
+
+    private func guestColumn(
+        _ guest: GuestID,
+        order: GuestOrder,
+        happy: Bool?,
+        size: CGFloat,
+        compact: Bool,
+        variant: GuestVariant
+    ) -> some View {
+        VStack(spacing: 4) {
+            GuestOrderCard(
+                guest: guest,
+                order: order,
+                language: model.progress.language,
+                happy: happy,
+                compact: compact
+            )
+            GuestPortrait(guest: guest, happy: happy ?? true, size: size, variant: variant)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     private func dish(_ session: PlaySession) -> some View {
@@ -125,57 +169,169 @@ struct PlayView: View {
             let radius = side * 0.42
 
             ZStack {
+                picnicCloth(theme: session.context.theme, side: side)
+
                 if session.phase == .slicing || session.phase == .resolved, let cut = session.draft {
                     SplitDishView(
                         kind: session.level.dish,
                         toppings: session.toppings,
                         cut: cut,
                         progress: splitProgress,
-                        plate: session.context.plate
+                        plate: session.context.plate,
+                        pizzaBaseAsset: session.context.pizzaBaseAsset
                     )
+                    if session.phase == .slicing {
+                        SliceImpactOverlay(
+                            cut: cut,
+                            progress: splitProgress,
+                            center: center,
+                            radius: radius
+                        )
+                        SliceSparkBurst(progress: splitProgress, center: center, radius: radius)
+                    }
                 } else {
-                    DishCanvas(kind: session.level.dish, toppings: session.toppings, cut: session.draft, split: 0)
+                    DishCanvas(
+                        kind: session.level.dish,
+                        toppings: session.toppings,
+                        cut: session.draft,
+                        split: 0,
+                        pizzaBaseAsset: session.context.pizzaBaseAsset
+                    )
                 }
 
                 if session.phase == .aiming {
-                    CutOverlay(
-                        cut: session.draft ?? session.level.hint,
-                        hint: session.level.hint,
-                        showHint: session.showHint,
-                        handles: session.draft != nil,
-                        center: center,
-                        radius: radius
-                    )
-                    .opacity(session.draft == nil && !session.showHint ? 0 : 1)
+                    if session.showHint {
+                        HintCutOverlay(
+                            cut: session.level.hint,
+                            center: center,
+                            radius: radius,
+                            start: hintStart,
+                            reduceMotion: systemReduceMotion || model.progress.reduceMotion
+                        )
+                            .transition(.opacity.combined(with: .scale(scale: 0.94)))
+                    }
+                    if swipePoints.count >= 2 {
+                        SwipeTrailOverlay(
+                            points: swipePoints,
+                            center: center,
+                            radius: radius,
+                            valid: swipeIsValid(
+                                session: session,
+                                points: swipePoints,
+                                center: center,
+                                radius: radius
+                            )
+                        )
+                    }
                 }
             }
             .contentShape(Rectangle())
             .gesture(dishGesture(session: session, center: center, radius: radius))
-            .onAppear { dishFrame = geo.frame(in: .local) }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(model.loc["swipeToSlice"])
             .accessibilityIdentifier("dish")
         }
         .padding(.horizontal, 8)
     }
 
+    private func picnicCloth(theme: ThemeID, side: CGFloat) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
+        return Gingham(color: themeColor(theme), cell: 24)
+            .overlay(themeColor(theme).opacity(0.09))
+            .clipShape(shape)
+            .overlay(shape.stroke(.white.opacity(0.88), lineWidth: 3))
+            .frame(width: side * 1.08, height: side * 1.04)
+            .rotationEffect(.degrees(-4))
+            .shadow(color: .black.opacity(0.22), radius: 12, y: 7)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
     private func bottom(_ session: PlaySession, loc: L10n) -> some View {
-        VStack(spacing: 8) {
-            if session.level.minAreaRatio != nil {
-                Text(loc["fair"])
-                    .font(.spBody(13))
-                    .foregroundStyle(Palette.inkSoft)
+        VStack(spacing: 6) {
+            if session.level.minAreaRatio != nil || session.level.requiresCleanCut {
+                HStack(spacing: 6) {
+                    if session.level.minAreaRatio != nil {
+                        challengeBadge(
+                            title: loc["fairChallenge"],
+                            system: "circle.lefthalf.filled",
+                            color: Palette.sky
+                        )
+                    }
+                    if session.level.requiresCleanCut {
+                        challengeBadge(
+                            title: loc["cleanChallenge"],
+                            system: "sparkles",
+                            color: Palette.coral
+                        )
+                    }
+                }
+            }
+
+            if session.showHint {
+                HStack(spacing: 9) {
+                    Image(systemName: "hand.draw.fill")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Palette.gold)
+                    Text(loc["hintGuide"])
+                        .font(.spBody(12))
+                        .foregroundStyle(Palette.ink)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.82)
+                        .accessibilityIdentifier("hint-guide-text")
+                    Spacer(minLength: 0)
+                    Button {
+                        model.openTutorial(from: .play)
+                    } label: {
+                        Label(loc["watchTutorial"], systemImage: "play.rectangle.fill")
+                            .font(.spBody(12))
+                            .foregroundStyle(Palette.moss)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("hint-demo-button")
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(.white.opacity(0.95), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(Palette.gold.opacity(0.8), lineWidth: 2))
+                .shadow(color: .black.opacity(0.12), radius: 7, y: 3)
             } else {
-                Text(loc["adjust"])
-                    .font(.spBody(13))
-                    .foregroundStyle(Palette.inkSoft)
+                HStack(spacing: 10) {
+                    Image(systemName: "hand.draw.fill")
+                        .font(.system(size: 21, weight: .bold))
+                        .foregroundStyle(themeColor(session.context.theme))
+                    Text(loc["swipeToSlice"])
+                        .font(.spBody(15))
+                        .foregroundStyle(Palette.ink)
+                    Image(systemName: "scribble.variable")
+                        .font(.system(size: 14, weight: .heavy))
+                        .foregroundStyle(Palette.sky)
+                }
+                .padding(.horizontal, 18)
+                .padding(.vertical, 10)
+                .background(.white.opacity(0.92), in: Capsule())
+                .overlay(Capsule().stroke(themeColor(session.context.theme).opacity(0.75), lineWidth: 2))
+                .shadow(color: .black.opacity(0.12), radius: 7, y: 3)
+                .accessibilityIdentifier("swipe-prompt")
             }
-            SPButton(title: loc["slice"], kind: .play, icon: "checkmark") {
-                model.confirmSlice()
-            }
-            .disabled(session.draft == nil || session.phase != .aiming)
-            .opacity(session.draft == nil ? 0.5 : 1)
-            .padding(.horizontal, 28)
-            .accessibilityIdentifier("slice-button")
         }
+        .padding(.horizontal, 16)
+        .opacity(session.phase == .aiming ? 1 : 0)
+        .allowsHitTesting(session.phase == .aiming)
+    }
+
+    private func challengeBadge(title: String, system: String, color: Color) -> some View {
+        Label(title, systemImage: system)
+            .font(.spBody(11))
+            .foregroundStyle(Palette.ink)
+            .lineLimit(1)
+            .minimumScaleFactor(0.72)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(.white.opacity(0.92), in: Capsule())
+            .overlay(Capsule().stroke(color.opacity(0.8), lineWidth: 1.5))
     }
 
     private func pauseOverlay(loc: L10n) -> some View {
@@ -198,63 +354,97 @@ struct PlayView: View {
     }
 
     private func dishGesture(session: PlaySession, center: CGPoint, radius: CGFloat) -> some Gesture {
-        DragGesture(minimumDistance: 4)
+        DragGesture(minimumDistance: 8)
             .onChanged { value in
                 guard session.phase == .aiming else { return }
-                if dragStart == nil {
-                    dragStart = value.startLocation
-                    activeHandle = nearestHandle(at: value.startLocation, cut: session.draft, center: center, radius: radius)
+                if swipePoints.isEmpty {
+                    Feedback.swipe(
+                        sound: model.progress.soundEnabled,
+                        haptics: model.progress.hapticsEnabled
+                    )
+                    swipePoints = [value.startLocation]
                 }
-                guard let start = dragStart else { return }
-                let p1 = DishSpace.fromView(start, center: center, radius: radius)
-                let p2 = DishSpace.fromView(value.location, center: center, radius: radius)
-
-                if let handle = activeHandle, let current = session.draft, let chord = current.chord() {
-                    switch handle {
-                    case .a:
-                        session.draft = Cut.through(p2, chord.1) ?? current
-                    case .b:
-                        session.draft = Cut.through(chord.0, p2) ?? current
-                    case .body:
-                        let delta = current.normal.x * (p2.x - p1.x) + current.normal.y * (p2.y - p1.y)
-                        session.draft = current.translating(by: delta)
-                        dragStart = value.location
-                    }
-                } else if let cut = Cut.through(p1, p2), abs(cut.offset) < 0.95 {
-                    session.draft = cut
-                }
+                appendSwipePoint(value.location)
             }
-            .onEnded { _ in
-                dragStart = nil
-                activeHandle = nil
-                if model.progress.hapticsEnabled { Feedback.tap() }
+            .onEnded { value in
+                guard session.phase == .aiming else {
+                    clearSwipe()
+                    return
+                }
+                appendSwipePoint(value.location)
+                let completedPoints = swipePoints
+                let cut = SwipeGeometry.cut(
+                    from: completedPoints,
+                    center: center,
+                    radius: radius
+                )
+                clearSwipe()
+                guard let cut else {
+                    Feedback.tap(
+                        sound: model.progress.soundEnabled,
+                        haptics: model.progress.hapticsEnabled
+                    )
+                    return
+                }
+                model.slice(with: cut)
             }
     }
 
-    private func nearestHandle(at point: CGPoint, cut: Cut?, center: CGPoint, radius: CGFloat) -> Handle? {
-        guard let cut, let chord = cut.chord() else { return nil }
-        let a = DishSpace.toView(chord.0, center: center, radius: radius)
-        let b = DishSpace.toView(chord.1, center: center, radius: radius)
-        let da = hypot(point.x - a.x, point.y - a.y)
-        let db = hypot(point.x - b.x, point.y - b.y)
-        if da < 28 { return .a }
-        if db < 28 { return .b }
-        // Distance to segment
-        let dist = distanceToSegment(point, a, b)
-        if dist < 22 { return .body }
-        return nil
+    private func difficultyDots(_ difficulty: Int) -> some View {
+        HStack(spacing: 2) {
+            ForEach(0..<5, id: \.self) { index in
+                Circle()
+                    .fill(index < difficulty ? difficultyColor(difficulty) : Palette.creamDark)
+                    .frame(width: 6, height: 6)
+            }
+        }
+        .accessibilityLabel("\(model.loc["difficulty"]) \(difficulty) / 5")
     }
 
-    private func distanceToSegment(_ p: CGPoint, _ a: CGPoint, _ b: CGPoint) -> CGFloat {
-        let dx = b.x - a.x
-        let dy = b.y - a.y
-        let len2 = dx * dx + dy * dy
-        guard len2 > 1 else { return hypot(p.x - a.x, p.y - a.y) }
-        var t = ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2
-        t = min(max(t, 0), 1)
-        let x = a.x + t * dx
-        let y = a.y + t * dy
-        return hypot(p.x - x, p.y - y)
+    private func difficultyColor(_ difficulty: Int) -> Color {
+        switch difficulty {
+        case 1: Palette.moss
+        case 2: Palette.sky
+        case 3: Palette.gold
+        case 4: Palette.coral
+        default: Color(red: 0.64, green: 0.32, blue: 0.82)
+        }
+    }
+
+    private func themeColor(_ theme: ThemeID) -> Color {
+        let cloth = theme.cloth
+        return Color(red: cloth.red, green: cloth.green, blue: cloth.blue)
+    }
+
+    private func swipeIsValid(
+        session: PlaySession,
+        points: [CGPoint],
+        center: CGPoint,
+        radius: CGFloat
+    ) -> Bool {
+        guard session.level.requiresCleanCut else { return true }
+        return session.toppings.allSatisfy { topping in
+            SwipeGeometry.minimumDistance(
+                from: topping.position,
+                toViewPoints: points,
+                center: center,
+                radius: radius
+            ) > topping.radius * 1.55
+        }
+    }
+
+    private func appendSwipePoint(_ point: CGPoint) {
+        guard let last = swipePoints.last else {
+            swipePoints = [point]
+            return
+        }
+        if hypot(point.x - last.x, point.y - last.y) >= 2 {
+            swipePoints.append(point)
+        }
+    }
+
+    private func clearSwipe() {
+        swipePoints.removeAll(keepingCapacity: true)
     }
 
     private func animateSlice() {

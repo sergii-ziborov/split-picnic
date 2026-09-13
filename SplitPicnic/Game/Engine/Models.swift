@@ -9,12 +9,16 @@ enum ToppingKind: String, Codable, CaseIterable, Sendable, Identifiable {
     case strawberry
     case blueberry
     case cherry
+    case pineapple
+    case onion
+    case corn
+    case mozzarella
 
     var id: String { rawValue }
 
     var isPizza: Bool {
         switch self {
-        case .pepperoni, .mushroom, .olive, .pepper, .basil: true
+        case .pepperoni, .mushroom, .olive, .pepper, .basil, .pineapple, .onion, .corn, .mozzarella: true
         default: false
         }
     }
@@ -23,6 +27,23 @@ enum ToppingKind: String, Codable, CaseIterable, Sendable, Identifiable {
         switch self {
         case .strawberry, .blueberry, .cherry: true
         default: false
+        }
+    }
+
+    var assetName: String {
+        switch self {
+        case .pepperoni: "ToppingPepperoni"
+        case .mushroom: "ToppingMushroom"
+        case .olive: "ToppingOlive"
+        case .pepper: "ToppingPepper"
+        case .basil: "ToppingBasil"
+        case .strawberry: "ToppingStrawberry"
+        case .blueberry: "ToppingBlueberry"
+        case .cherry: "ToppingCherry"
+        case .pineapple: "ToppingPineapple"
+        case .onion: "ToppingOnion"
+        case .corn: "ToppingCorn"
+        case .mozzarella: "ToppingMozzarella"
         }
     }
 }
@@ -35,6 +56,12 @@ enum DishKind: String, Codable, Sendable {
 enum GuestID: String, Codable, Sendable {
     case dog
     case cat
+}
+
+enum GuestVariant: String, Codable, Sendable {
+    case classic
+    case sunny
+    case woodland
 }
 
 struct Topping: Identifiable, Equatable, Sendable {
@@ -111,10 +138,16 @@ struct LevelDef: Identifiable, Equatable, Sendable {
     var dog: GuestOrder
     var cat: GuestOrder
     var minAreaRatio: Double?
+    var requiresCleanCut: Bool
     var hints: Int
     var margin: Double
 
     var id: String { "\(world.rawValue)-\(index)" }
+
+    var difficulty: Int {
+        let worldRank = WorldID.allCases.firstIndex(of: world) ?? 0
+        return min(5, 1 + worldRank + index / 4)
+    }
 }
 
 enum WorldID: String, Codable, CaseIterable, Sendable, Identifiable {
@@ -139,7 +172,7 @@ enum WorldID: String, Codable, CaseIterable, Sendable, Identifiable {
         case .pizzaPark: "One slice. Two toppings. Learn the cut."
         case .berryMeadow: "Count the berries. Leave the cherries."
         case .forestPicnic: "Both guests have a real order."
-        case .sunsetBakery: "Fair slices, still one line."
+        case .sunsetBakery: "Fair slices with a freehand cut."
         }
     }
 
@@ -246,6 +279,32 @@ struct PlayContext: Equatable, Sendable {
     var plate: PlateID
 
     var level: LevelDef { LevelCatalog.level(world: world, index: levelIndex) }
+
+    var pizzaBaseAsset: String {
+        let worldIndex = WorldID.allCases.firstIndex(of: world) ?? 0
+        let dailyShift = isDaily ? Int(seed % 2) : 0
+        return (worldIndex + levelIndex / 2 + dailyShift).isMultiple(of: 2)
+            ? "PizzaBaseWarm" : "PizzaBaseGolden"
+    }
+
+    func guestVariant(for guest: GuestID) -> GuestVariant {
+        let worldIndex = WorldID.allCases.firstIndex(of: world) ?? 0
+        let dailyShift = isDaily ? Int(seed % 7) : 0
+        let cast = (worldIndex * 5 + levelIndex + dailyShift) % 7
+        switch (cast, guest) {
+        case (0, _): return .classic
+        case (1, .dog): return .sunny
+        case (1, .cat): return .classic
+        case (2, .dog): return .woodland
+        case (2, .cat): return .sunny
+        case (3, .dog): return .classic
+        case (3, .cat): return .woodland
+        case (4, _): return .sunny
+        case (5, .dog): return .sunny
+        case (5, .cat): return .woodland
+        default: return .woodland
+        }
+    }
 }
 
 struct SliceOutcome: Equatable, Sendable {
@@ -255,11 +314,12 @@ struct SliceOutcome: Equatable, Sendable {
     var catCounts: [ToppingKind: Int]
     var dogHalf: Half
     var areaOK: Bool
+    var cleanCut: Bool
     var positiveArea: Double
     var negativeArea: Double
     var stars: Int
 
-    var success: Bool { dogHappy && catHappy && areaOK }
+    var success: Bool { dogHappy && catHappy && areaOK && cleanCut }
 }
 
 struct RoundOutcome: Equatable, Sendable {
@@ -272,6 +332,7 @@ struct RoundOutcome: Equatable, Sendable {
     var dogHappy: Bool
     var catHappy: Bool
     var areaOK: Bool
+    var cleanCut: Bool
 }
 
 enum StarRating {
@@ -321,6 +382,16 @@ struct ProgressState: Codable, Equatable, Sendable {
     func isUnlocked(_ world: WorldID) -> Bool { totalStars >= world.starsToUnlock }
 
     func isThemeUnlocked(_ theme: ThemeID) -> Bool { totalStars >= theme.starsToUnlock }
+
+    func theme(for world: WorldID, levelIndex: Int, isDaily: Bool = false, seed: UInt64 = 0) -> ThemeID {
+        let available = ThemeID.allCases.filter(isThemeUnlocked)
+        guard !available.isEmpty else { return .pizzaParty }
+        let start = available.firstIndex(of: selectedTheme) ?? 0
+        let worldShift = WorldID.allCases.firstIndex(of: world) ?? 0
+        let dailyShift = isDaily ? Int(seed % UInt64(available.count)) : 0
+        let stageShift = levelIndex / 3
+        return available[(start + worldShift + stageShift + dailyShift) % available.count]
+    }
 
     func isPlateUnlocked(_ plate: PlateID) -> Bool { totalStars >= plate.starsToUnlock }
 

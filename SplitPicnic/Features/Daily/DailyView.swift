@@ -10,23 +10,20 @@ struct DailyView: View {
     var body: some View {
         let loc = model.loc
         let remaining = DailyStamp.secondsUntilReset(now: now)
-        ZStack {
-            PicnicBackdrop(asset: "PicnicBackground")
-            VStack(spacing: 0) {
-                ScreenHeader(title: loc["dailyTitle"]) { model.goHome() }
-                Spacer()
+        GeometryReader { geo in
+            let compact = geo.size.height < 800
+            ZStack {
+                PicnicBackdrop(asset: "PicnicBackground")
+                VStack(spacing: 0) {
+                    ScreenHeader(title: loc["dailyTitle"]) { model.goHome() }
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: compact ? 12 : 16) {
                 WoodPanel {
-                    VStack(spacing: 14) {
-                        HStack {
-                            Image(systemName: "calendar")
-                                .foregroundStyle(Palette.sky)
-                            Text(loc["dailyTitle"])
-                                .font(.spDisplay(26))
-                                .foregroundStyle(Palette.ink)
-                        }
+                    VStack(spacing: compact ? 10 : 14) {
                         Text(loc["dailyBlurb"])
-                            .font(.spScript(16))
+                            .font(.spScript(15))
                             .foregroundStyle(Palette.inkSoft)
+                            .multilineTextAlignment(.center)
 
                         DishCanvas(
                             kind: LevelCatalog.level(world: .pizzaPark, index: 0).dish,
@@ -34,7 +31,7 @@ struct DailyView: View {
                             cut: .vertical,
                             split: 0
                         )
-                        .frame(height: 210)
+                        .frame(height: compact ? 160 : 200)
                         .allowsHitTesting(false)
 
                         HStack(spacing: 8) {
@@ -59,16 +56,19 @@ struct DailyView: View {
                             .foregroundStyle(Palette.inkSoft)
                     }
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
 
                 SPButton(title: loc["play"], kind: .play, icon: "play.fill") {
                     model.playDaily()
                 }
-                .padding(.horizontal, 32)
-                .padding(.top, 18)
+                .padding(.horizontal, 24)
                 .accessibilityIdentifier("daily-play-button")
-                Spacer()
+                        }
+                        .padding(.bottom, 16)
+                    }
+                }
             }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
         .onReceive(timer) { now = $0 }
     }

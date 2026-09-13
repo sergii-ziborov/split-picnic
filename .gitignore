@@ -1,6 +1,6 @@
 .DS_Store
-DerivedData/
-DerivedDataDevice/
+DerivedData*/
+docs/screenshots/*.png
 .build/
 .swiftpm/
 xcuserdata/

@@ -20,16 +20,71 @@ final class AppModel {
     var progress: ProgressState
     var session: PlaySession?
     var lastOutcome: RoundOutcome?
+    var tutorialReturnScreen: Screen?
 
     private let store: ProgressStore
 
     init(store: ProgressStore = ProgressStore()) {
         self.store = store
+        let arguments = ProcessInfo.processInfo.arguments
         var loaded = store.load()
-        if ProcessInfo.processInfo.arguments.contains("ui-testing") {
+        if arguments.contains("reset-progress") {
+            loaded = .fresh
+        }
+        if arguments.contains("ui-testing") {
             loaded.tutorialSeen = true
         }
+        if arguments.contains("ui-progress-map") {
+            for level in LevelCatalog.levels(for: .pizzaPark) {
+                loaded.starsByLevel[level.id] = 3
+            }
+            for level in LevelCatalog.levels(for: .berryMeadow).prefix(7) {
+                loaded.starsByLevel[level.id] = 2
+            }
+            for level in LevelCatalog.levels(for: .forestPicnic).prefix(3) {
+                loaded.starsByLevel[level.id] = 1
+            }
+            loaded.totalSolves = loaded.starsByLevel.count
+        }
         self.progress = loaded
+
+        let previewPrefix = "ui-level="
+        if arguments.contains("ui-testing"),
+           let value = arguments.first(where: { $0.hasPrefix(previewPrefix) }),
+           let number = Int(value.dropFirst(previewPrefix.count)),
+           let level = WorldID.allCases
+               .flatMap({ LevelCatalog.levels(for: $0) })
+               .first(where: { $0.number == number })
+        {
+            let context = PlayContext(
+                world: level.world,
+                levelIndex: level.index,
+                seed: 77,
+                isDaily: false,
+                theme: loaded.theme(for: level.world, levelIndex: level.index),
+                plate: loaded.selectedPlate
+            )
+            let session = PlaySession(context: context)
+            if arguments.contains("ui-curved-preview"),
+               let cut = Cut.following([
+                   Vec2(x: -0.05, y: 1),
+                   Vec2(x: 0.18, y: 0.55),
+                   Vec2(x: 0.38, y: 0.05),
+                   Vec2(x: 0.20, y: -0.48),
+                   Vec2(x: -0.04, y: -1),
+               ])
+            {
+                session.draft = cut
+                session.attempts = 1
+                session.lastSlice = session.evaluate(cut: cut)
+                session.phase = .resolved
+            }
+            self.session = session
+            self.screen = .play
+        }
+        if !loaded.tutorialSeen && !arguments.contains("ui-testing") && screen == .home {
+            screen = .tutorial
+        }
     }
 
     var uiTesting: Bool {
@@ -40,6 +95,7 @@ final class AppModel {
 
     func playTapped() {
         if !progress.tutorialSeen {
+            tutorialReturnScreen = nil
             screen = .tutorial
             return
         }
@@ -48,9 +104,25 @@ final class AppModel {
     }
 
     func finishTutorial() {
+        tutorialReturnScreen = nil
         progress.tutorialSeen = true
         saveProgress()
-        startPlay(world: .pizzaPark, index: 0, daily: false)
+        let next = progress.nextPlayable()
+        startPlay(world: next.0, index: next.1, daily: false)
+    }
+
+    func openTutorial(from source: Screen) {
+        tutorialReturnScreen = source
+        screen = .tutorial
+    }
+
+    func closeTutorial() {
+        if let source = tutorialReturnScreen {
+            tutorialReturnScreen = nil
+            screen = source
+        } else {
+            goHome()
+        }
     }
 
     func playDaily() {
@@ -97,14 +169,17 @@ final class AppModel {
         let outcome = session.evaluate(cut: cut)
         session.lastSlice = outcome
         session.phase = progress.reduceMotion ? .resolved : .slicing
-        if progress.hapticsEnabled {
-            Feedback.slice(sound: progress.soundEnabled)
-        } else if progress.soundEnabled {
-            Feedback.slice(sound: true)
-        }
+        Feedback.slice(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
         if progress.reduceMotion {
             finishSlice()
         }
+    }
+
+    func slice(with cut: Cut) {
+        guard let session, session.phase == .aiming else { return }
+        session.draft = cut
+        session.showHint = false
+        confirmSlice()
     }
 
     func finishSlice() {
@@ -122,11 +197,10 @@ final class AppModel {
                 isDaily: session.context.isDaily,
                 dogHappy: true,
                 catHappy: true,
-                areaOK: true
+                areaOK: true,
+                cleanCut: true
             )
-            if progress.hapticsEnabled || progress.soundEnabled {
-                Feedback.success(sound: progress.soundEnabled)
-            }
+            Feedback.success(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
             screen = .result
         } else {
             lastOutcome = RoundOutcome(
@@ -138,33 +212,34 @@ final class AppModel {
                 isDaily: session.context.isDaily,
                 dogHappy: slice.dogHappy,
                 catHappy: slice.catHappy,
-                areaOK: slice.areaOK
+                areaOK: slice.areaOK,
+                cleanCut: slice.cleanCut
             )
-            if progress.hapticsEnabled || progress.soundEnabled {
-                Feedback.miss(sound: progress.soundEnabled)
-            }
+            Feedback.miss(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
             screen = .fail
         }
     }
 
     func useHint() {
-        guard let session, session.hintsLeft > 0 else { return }
+        guard let session, session.phase == .aiming, !session.showHint, session.hintsLeft > 0 else { return }
         session.showHint = true
         session.hintsUsed += 1
         session.hintsLeft -= 1
-        if progress.hapticsEnabled { Feedback.hint() }
+        Feedback.hint(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
     }
 
     func selectTheme(_ theme: ThemeID) {
         guard progress.isThemeUnlocked(theme) else { return }
         progress.selectedTheme = theme
         saveProgress()
+        Feedback.tap(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
     }
 
     func selectPlate(_ plate: PlateID) {
         guard progress.isPlateUnlocked(plate) else { return }
         progress.selectedPlate = plate
         saveProgress()
+        Feedback.tap(sound: progress.soundEnabled, haptics: progress.hapticsEnabled)
     }
 
     func saveProgress() {
@@ -191,16 +266,14 @@ final class AppModel {
             levelIndex: index,
             seed: seed ?? UInt64.random(in: 1...UInt64.max),
             isDaily: daily,
-            theme: progress.selectedTheme,
+            theme: progress.theme(for: world, levelIndex: index, isDaily: daily, seed: seed ?? 0),
             plate: progress.selectedPlate
         )
         let session = PlaySession(context: context)
-        if uiTesting {
-            session.draft = session.level.hint
-        }
         self.session = session
         lastOutcome = nil
         screen = .play
+        Feedback.ready(sound: progress.soundEnabled)
     }
 }
 
@@ -238,6 +311,7 @@ final class PlaySession {
             dog: level.dog,
             cat: level.cat,
             minAreaRatio: level.minAreaRatio,
+            requiresCleanCut: level.requiresCleanCut,
             attempts: attempts,
             hintsUsed: hintsUsed
         )
